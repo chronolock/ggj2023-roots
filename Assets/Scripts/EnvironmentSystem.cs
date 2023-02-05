@@ -8,7 +8,16 @@ public class EnvironmentSystem : MonoBehaviour
     [Range(1, 10)]
     public int initLife = 3;
 
+    [Range(1, 10)]
     public int currentLife = 3;
+
+    [Range(0, 10)]
+    public float rootDuration = 5;
+
+    [Range(0, 10)]
+    public float rootPrisonDuration = 5;
+
+    public bool rootsOverRoots = true;
 
     private static EnvironmentSystem instance;
 
@@ -34,6 +43,30 @@ public class EnvironmentSystem : MonoBehaviour
         set
         {
             instance.currentLife = value;
+        }
+    }
+
+    public static float RootDuration
+    {
+        get
+        {
+            return instance.rootDuration;
+        }
+    }
+
+    public static float RootPrisonDuration
+    {
+        get
+        {
+            return instance.rootPrisonDuration;
+        }
+    }
+
+    public static bool RootsOverRoots
+    {
+        get
+        {
+            return instance.rootsOverRoots;
         }
     }
 }

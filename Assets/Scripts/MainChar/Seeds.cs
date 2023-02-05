@@ -62,22 +62,45 @@ public class Seeds : MonoBehaviour
             {
                 stopSeed = true;
 
-                if (collision.tag == "Monster")
+                if (collision.tag == "Enemy")
                 {
-                    collision.GetComponent<Monster>().TrapMonster();
-                    GameObject tmpRoots = Instantiate(roots);
-                    tmpRoots.transform.position = collision.transform.position;
+                    BuildPrisonRoots(collision.transform.position, collision.GetComponent<Monster>());
                 }
                 else
                 {
-                    GameObject tmpRoots = Instantiate(roots);
-                    tmpRoots.transform.position = collision.transform.position;
+
+                    if (EnvironmentSystem.RootsOverRoots)
+                    {
+                        BuildRoots(transform.position);
+                    } else
+                    {
+                        if(collision.tag != "Roots")
+                        {
+                            BuildRoots(transform.position);
+                        }
+                    }
                 }
 
                 DestroySeed();
             }           
         }
     }
+
+    private void BuildRoots(Vector2 position)
+    {
+        GameObject tmpRoots = Instantiate(roots);
+        tmpRoots.transform.position = position;
+        tmpRoots.AddComponent<Roots>().DestroyAt(EnvironmentSystem.RootPrisonDuration);
+    }
+
+    private void BuildPrisonRoots(Vector2 position, Monster monster)
+    {
+        monster.TrapMonster();
+        GameObject tmpRoots = Instantiate(roots);
+        tmpRoots.transform.position = position;
+        tmpRoots.AddComponent<Roots>().DestroyAt(EnvironmentSystem.RootPrisonDuration, monster);
+    }
+
 
     public void DestroySeed()
     {

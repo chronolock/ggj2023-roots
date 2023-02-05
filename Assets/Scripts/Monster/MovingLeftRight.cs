@@ -79,6 +79,11 @@ public class MovingLeftRight : MonoBehaviour
                     invertDirection();
                 }
             }
+
+            if(collision.collider.tag == "Roots")
+            {
+                invertDirection();
+            }
         }
     }
 
