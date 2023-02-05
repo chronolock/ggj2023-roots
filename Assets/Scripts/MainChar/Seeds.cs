@@ -58,6 +58,8 @@ public class Seeds : MonoBehaviour
     {
         if(collision != null)
         {
+
+
             if(collision.tag != "Player" && collision.tag != "Seed")
             {
                 stopSeed = true;
@@ -68,15 +70,21 @@ public class Seeds : MonoBehaviour
                 }
                 else
                 {
-
-                    if (EnvironmentSystem.RootsOverRoots)
+                    if(collision.tag == "Spike")
                     {
-                        BuildRoots(transform.position);
+                        DestroySeed();
                     } else
                     {
-                        if(collision.tag != "Roots")
+                        if (EnvironmentSystem.RootsOverRoots)
                         {
                             BuildRoots(transform.position);
+                        }
+                        else
+                        {
+                            if (collision.tag != "Roots")
+                            {
+                                BuildRoots(transform.position);
+                            }
                         }
                     }
                 }

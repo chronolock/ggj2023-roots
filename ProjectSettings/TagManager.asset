@@ -16,6 +16,7 @@ TagManager:
   - Seed
   - Roots
   - EnemyBullet
+  - Spike
   layers:
   - Default
   - TransparentFX

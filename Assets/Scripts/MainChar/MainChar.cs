@@ -41,7 +41,15 @@ public class MainChar : MonoBehaviour
     [Range(0, 20)]
     public int seedLimit = 0;
 
+    public AudioClip shotSeedAudio;
+    public AudioClip takeDamageAudio;
+    public AudioClip reviveAudio;
+    public AudioClip deathAudio;
+
+    private AudioSource aSource;
+
     private Vector3 mousePos = Vector3.zero;
+
 
     private bool inInvencible = false;
 
@@ -64,6 +72,7 @@ public class MainChar : MonoBehaviour
         animator = GetComponent<Animator>();
         spRender = GetComponent<SpriteRenderer>();
         lineRender = GetComponent<LineRenderer>();
+        aSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -181,6 +190,8 @@ public class MainChar : MonoBehaviour
 
                 Vector3 direction = (mousePos - seed.transform.position).normalized;
                 seed.throwSeeds(new Vector2(direction.x, direction.y));
+
+                PlayAudio(shotSeedAudio);
             }
         }
     }
@@ -211,6 +222,7 @@ public class MainChar : MonoBehaviour
                 rbody2D.AddForce(forceDirection * takeDamageRecoiForce, ForceMode2D.Impulse);
                 //rbody2D.AddForce(Vector2.up * power * 20, ForceMode2D.Impulse);
                 setInvencible();
+                PlayAudio(takeDamageAudio);
             }
 
         }
@@ -231,16 +243,20 @@ public class MainChar : MonoBehaviour
     public void restart()
     {
         animator.SetTrigger("restart");
+        animator.SetBool("dead", false);
         playerDead = false;
         rbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
         transform.position = initPos;
+        EnvironmentSystem.CurrentLife = EnvironmentSystem.InitLife;
         setInvencible();
+        PlayAudio(reviveAudio);
     }
 
     public void dead()
     {
         animator.SetBool("dead", true);
         playerDead = true;
+        PlayAudio(deathAudio);
         rbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
     }
 
@@ -251,6 +267,15 @@ public class MainChar : MonoBehaviour
         }
     }
 
+
+    public void PlayAudio(AudioClip clip)
+    {
+        if (clip)
+        {
+            aSource.clip = clip;
+            aSource.Play();
+        }
+    }
 
     /*private Vector3 LerpByDistance(Vector3 firstVector, Vector3 secondVector, float distance)
     {
